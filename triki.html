@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3 en Raya</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#1e293b;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.contenedor{
+    text-align:center;
+}
+
+h1{
+    margin-bottom:20px;
+}
+
+.tablero{
+    display:grid;
+    grid-template-columns:repeat(3,110px);
+    grid-template-rows:repeat(3,110px);
+    gap:10px;
+    margin:auto;
+}
+
+.casilla{
+    background:#334155;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:60px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.casilla:hover{
+    background:#475569;
+}
+
+#estado{
+    margin:20px;
+    font-size:22px;
+}
+
+button{
+    padding:12px 25px;
+    font-size:18px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#0ea5e9;
+    color:white;
+}
+
+button:hover{
+    background:#0284c7;
+}
+</style>
+
+</head>
+<body>
+
+<div class="contenedor">
+
+<h1>🎮 3 en Raya</h1>
+
+<div id="estado">
+Turno de X
+</div>
+
+<div class="tablero">
+
+<div class="casilla"></div>
+<div class="casilla"></div>
+<div class="casilla"></div>
+
+<div class="casilla"></div>
+<div class="casilla"></div>
+<div class="casilla"></div>
+
+<div class="casilla"></div>
+<div class="casilla"></div>
+<div class="casilla"></div>
+
+</div>
+
+<br>
+
+<button onclick="reiniciar()">
+Reiniciar
+</button>
+
+</div>
+
+<script>
+
+const casillas=document.querySelectorAll(".casilla");
+const estado=document.getElementById("estado");
+
+let turno="X";
+let juegoTerminado=false;
+
+const ganar=[
+[0,1,2],
+[3,4,5],
+[6,7,8],
+[0,3,6],
+[1,4,7],
+[2,5,8],
+[0,4,8],
+[2,4,6]
+];
+
+casillas.forEach(casilla=>{
+
+casilla.addEventListener("click",()=>{
+
+if(casilla.textContent!="" || juegoTerminado) return;
+
+casilla.textContent=turno;
+
+if(comprobarGanador()){
+
+estado.textContent="🎉 Ganó "+turno;
+juegoTerminado=true;
+return;
+
+}
+
+if([...casillas].every(c=>c.textContent!="")){
+
+estado.textContent="🤝 Empate";
+juegoTerminado=true;
+return;
+
+}
+
+turno=turno=="X"?"O":"X";
+
+estado.textContent="Turno de "+turno;
+
+});
+
+});
+
+function comprobarGanador(){
+
+return ganar.some(combinacion=>{
+
+const[a,b,c]=combinacion;
+
+return casillas[a].textContent &&
+casillas[a].textContent==casillas[b].textContent &&
+casillas[a].textContent==casillas[c].textContent;
+
+});
+
+}
+
+function reiniciar(){
+
+casillas.forEach(c=>c.textContent="");
+
+turno="X";
+juegoTerminado=false;
+
+estado.textContent="Turno de X";
+
+}
+
+</script>
+
+</body>
+</html>
